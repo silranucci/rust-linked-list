@@ -11,22 +11,28 @@ struct Node {
 
 enum Link {
     Empty,
-    Elem(Box<Node>)
+    Elem(Box<Node>),
 }
 
 impl Drop for List {
     fn drop(&mut self) {
-        let mut curr_link  = mem::replace(&mut self.head, Link::Empty);
+        let mut curr_link = mem::replace(&mut self.head, Link::Empty);
 
         while let Link::Elem(mut boxed_node) = curr_link {
-            curr_link  = mem::replace(&mut boxed_node.next, Link::Empty);
+            curr_link = mem::replace(&mut boxed_node.next, Link::Empty);
         }
+    }
+}
+
+impl Default for List {
+    fn default() -> Self {
+        List::new()
     }
 }
 
 impl List {
     pub fn new() -> Self {
-        List {head: Link::Empty}
+        List { head: Link::Empty }
     }
 
     pub fn push(&mut self, value: i32) {
@@ -51,7 +57,7 @@ impl List {
 #[cfg(test)]
 mod test {
     use super::List;
-    
+
     #[test]
     fn basics() {
         let mut list = List::new();
